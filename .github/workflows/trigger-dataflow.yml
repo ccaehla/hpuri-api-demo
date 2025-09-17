@@ -1,12 +1,23 @@
 name: Trigger Fabric Dataflow
 
 on:
-  workflow_dispatch: # You can also trigger on push, PR, etc.
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target Environment (e.g., DEV, QA, PROD)'
+        required: true
+        default: 'DEV'
 
 jobs:
   trigger:
     runs-on: ubuntu-latest
+    env:
+      ENVIRONMENT: ${{ github.event.inputs.environment }}
+
     steps:
+    - name: Print Environment
+      run: echo "Running for environment: $ENVIRONMENT"
+
     - name: Get Access Token
       id: get_token
       run: |
@@ -20,6 +31,7 @@ jobs:
 
     - name: Trigger Dataflow
       run: |
-        curl -X POST https://api.powerbi.com/v1.0/myorg/groups/${{ secrets.FABRIC_WORKSPACE_ID }}/dataflows/${{ secrets.FABRIC_DATAFLOW_ID }}/refreshes \
+        echo "Triggering dataflow for environment: $ENVIRONMENT"
+        curl -X POST https://api.powerbi.com/v1.0/myorg/groups/${{ secrets.FABRIC_WORKSPACE_ID }}-${ENVIRONMENT}/dataflows/${{ secrets.FABRIC_DATAFLOW_ID }} \
           -H "Authorization: Bearer ${{ steps.get_token.outputs.token }}" \
           -H "Content-Type: application/json"
