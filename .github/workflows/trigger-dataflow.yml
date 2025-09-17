@@ -1,0 +1,25 @@
+name: Trigger Fabric Dataflow
+
+on:
+  workflow_dispatch: # You can also trigger on push, PR, etc.
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Get Access Token
+      id: get_token
+      run: |
+        token_response=$(curl -X POST -H "Content-Type: application/x-www-form-urlencoded" \
+          -d "grant_type=client_credentials&client_id=${{ secrets.FABRIC_CLIENT_ID }}&client_secret=${{ secrets.FABRIC_CLIENT_SECRET }}&scope=https://analysis.windows.net/powerbi/api/.default" \
+          https://login.microsoftonline.com/${{ secrets.FABRIC_TENANT_ID }}/oauth2/v2.0/token)
+
+        access_token=$(echo $token_response | jq -r '.access_token')
+        echo "::add-mask::$access_token"
+        echo "token=$access_token" >> $GITHUB_OUTPUT
+
+    - name: Trigger Dataflow
+      run: |
+        curl -X POST https://api.powerbi.com/v1.0/myorg/groups/${{ secrets.FABRIC_WORKSPACE_ID }}/dataflows/${{ secrets.FABRIC_DATAFLOW_ID }}/refreshes \
+          -H "Authorization: Bearer ${{ steps.get_token.outputs.token }}" \
+          -H "Content-Type: application/json"
