@@ -57,5 +57,5 @@ jobs:
         
         curl -X POST \
           "https://api.powerbi.com/v1.0/myorg/groups/${{ secrets.FABRIC_WORKSPACE_ID }}/dataflows/${{ secrets.FABRIC_DATAFLOW_ID }}/refreshes" \
-          -H "Authorization: Bearer ${{ access_token }}" \
+          -H "Authorization: Bearer " \
           -H "Content-Type: application/json"
