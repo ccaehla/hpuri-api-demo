@@ -55,6 +55,6 @@ jobs:
       run: |
         echo "🚀 Triggering Dataflow for ${{ env.ENV }} environment..."
         curl -X POST \
-          "https://api.powerbi.com/v1.0/myorg/groups/${{ steps.ids.outputs.WORKSPACE_ID }}/dataflows/${{ steps.ids.outputs.DATAFLOW_ID }}/refreshes" \
+          "https://api.powerbi.com/v1.0/myorg/groups/${{ secrets.FABRIC_WORKSPACE_ID }}/dataflows/${{ secrets.FABRIC_DATAFLOW_ID }}/refreshes" \
           -H "Authorization: Bearer ${{ steps.get_token.outputs.token }}" \
           -H "Content-Type: application/json"
