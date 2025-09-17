@@ -48,8 +48,8 @@ jobs:
 
         response=$(curl -s -X POST -H "Content-Type: application/x-www-form-urlencoded" \
           -d "grant_type=client_credentials" \
-          -d "client_id=${{ secrets.FABRIC_CLIENT_ID }}" \
-          -d "client_secret=${{ secrets.FABRIC_CLIENT_SECRET }}" \
+          -d "client_id=${{ FABRIC_CLIENT_ID }}" \
+          -d "client_secret=${{ FABRIC_CLIENT_SECRET }}" \
           -d "scope=https://analysis.windows.net/powerbi/api/.default" \
           https://login.microsoftonline.com/${{ secrets.FABRIC_TENANT_ID }}/oauth2/v2.0/token)
 
