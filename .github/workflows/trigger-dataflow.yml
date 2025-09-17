@@ -24,8 +24,10 @@ jobs:
       run: |
         case "${{ env.ENV }}" in
           DEV)
-            echo "WORKSPACE_ID=${{ secrets.FABRIC_WORKSPACE_ID_DEV }}" >> $GITHUB_OUTPUT
-            echo "DATAFLOW_ID=${{ secrets.FABRIC_DATAFLOW_ID_DEV }}" >> $GITHUB_OUTPUT
+            echo "secret_ID=${{ secrets.FABRIC_CLIENT_SECRET }}" >> $GITHUB_OUTPUT
+            echo "client_ID=${{ secrets.FABRIC_CLIENT_ID }}" >> $GITHUB_OUTPUT
+            echo "WORKSPACE_ID=${{ secrets.FABRIC_WORKSPACE_ID }}" >> $GITHUB_OUTPUT
+            echo "DATAFLOW_ID=${{ secrets.FABRIC_DATAFLOW_ID }}" >> $GITHUB_OUTPUT
             ;;
           QA)
             echo "WORKSPACE_ID=${{ secrets.FABRIC_WORKSPACE_ID_QA }}" >> $GITHUB_OUTPUT
