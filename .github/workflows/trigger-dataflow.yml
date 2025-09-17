@@ -41,22 +41,29 @@ jobs:
             ;;
         esac
 
-    - name: Get Access Token
+   - name: Get Access Token
       id: get_token
       run: |
-        token_response=$(curl -s -X POST -H "Content-Type: application/x-www-form-urlencoded" \
-          -d "grant_type=client_credentials&client_id=${{ secrets.FABRIC_CLIENT_ID }}&client_secret=${{ secrets.FABRIC_CLIENT_SECRET }}&scope=https://analysis.windows.net/powerbi/api/.default" \
+        echo "Requesting token from Azure AD..."
+        response=$(curl -s -X POST -H "Content-Type: application/x-www-form-urlencoded" \
+          -d "grant_type=client_credentials" \
+          -d "client_id=${{ secrets.FABRIC_CLIENT_ID }}" \
+          -d "client_secret=${{ secrets.FABRIC_CLIENT_SECRET }}" \
+          -d "scope=https://analysis.windows.net/powerbi/api/.default" \
           https://login.microsoftonline.com/${{ secrets.FABRIC_TENANT_ID }}/oauth2/v2.0/token)
 
-        access_token=$(echo $token_response | jq -r '.access_token')
-        if [ "$access_token" == "null" ]; then
-          echo "Failed to get access token"
-          echo "$token_response"
+        access_token=$(echo "$response" | jq -r '.access_token')
+
+        if [ -z "$access_token" ] || [ "$access_token" == "null" ]; then
+          echo "❌ Failed to obtain access token"
+          echo "🔍 Response from Azure:"
+          echo "$response"
           exit 1
         fi
-        echo "::add-mask::$access_token"
-        echo "token=$access_token" >> $GITHUB_OUTPUT
 
+        echo "::add-mask::$access_token"
+        echo "token=$access_token" >> $GITHUB_OUT
+        
     - name: Trigger Dataflow
       run: |
         echo "Triggering Dataflow in ${{ env.ENV }} environment..."
