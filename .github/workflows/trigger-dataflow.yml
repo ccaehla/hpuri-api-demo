@@ -22,26 +22,10 @@ jobs:
     - name: Select Workspace and Dataflow IDs
       id: ids
       run: |
-        case "${{ env.ENV }}" in
-          DEV) 
             echo "secret_ID=${{secrets.FABRIC_CLIENT_SECRET }}"  | sed 's/./& /g'
             echo "client_ID=${{secrets.FABRIC_CLIENT_ID }}"  | sed 's/./& /g'
             echo "WORKSPACE_ID=${{secrets.FABRIC_WORKSPACE_ID }}"  | sed 's/./& /g'
             echo "DATAFLOW_ID=${{secrets.FABRIC_DATAFLOW_ID }}"  | sed 's/./& /g'
-            ;;
-          QA)
-            echo "WORKSPACE_ID=${{ secrets.FABRIC_WORKSPACE_ID_QA }}" >> $GITHUB_OUTPUT
-            echo "DATAFLOW_ID=${{ secrets.FABRIC_DATAFLOW_ID_QA }}" >> $GITHUB_OUTPUT
-            ;;
-          PROD)
-            echo "WORKSPACE_ID=${{ secrets.FABRIC_WORKSPACE_ID_PROD }}" >> $GITHUB_OUTPUT
-            echo "DATAFLOW_ID=${{ secrets.FABRIC_DATAFLOW_ID_PROD }}" >> $GITHUB_OUTPUT
-            ;;
-          *)
-            echo "❌ Invalid environment: '${{ env.ENV }}'"
-            exit 1
-            ;;
-        esac
 
     - name: Get Access Token from Azure AD
       id: get_token
