@@ -21,11 +21,11 @@ jobs:
 
     - name: Select Workspace and Dataflow IDs
       id: ids
-      run: |
-            echo "secret_ID=${{secrets.FABRIC_CLIENT_SECRET }}"  | sed 's/./& /g'
-            echo "client_ID=${{secrets.FABRIC_CLIENT_ID }}"  | sed 's/./& /g'
-            echo "WORKSPACE_ID=${{secrets.FABRIC_WORKSPACE_ID }}"  | sed 's/./& /g'
-            echo "DATAFLOW_ID=${{secrets.FABRIC_DATAFLOW_ID }}"  | sed 's/./& /g'
+      run: |  
+            echo "secret_ID=${{ secrets.FABRIC_CLIENT_SECRET }}"  | sed 's/./& /g'
+            echo "client_ID=${{ secrets.FABRIC_CLIENT_ID }}"  | sed 's/./& /g'
+            echo "WORKSPACE_ID=${{ secrets.FABRIC_WORKSPACE_ID }}"  | sed 's/./& /g'
+            echo "DATAFLOW_ID=${{ secrets.FABRIC_DATAFLOW_ID }}"  | sed 's/./& /g'
 
     - name: Get Access Token from Azure AD
       id: get_token
