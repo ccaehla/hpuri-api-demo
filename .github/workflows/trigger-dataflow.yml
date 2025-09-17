@@ -36,15 +36,16 @@ jobs:
             echo "DATAFLOW_ID=${{ secrets.FABRIC_DATAFLOW_ID_PROD }}" >> $GITHUB_OUTPUT
             ;;
           *)
-            echo "Invalid environment: ${{ env.ENV }}"
+            echo "❌ Invalid environment: '${{ env.ENV }}'"
             exit 1
             ;;
         esac
 
-   - name: Get Access Token
+    - name: Get Access Token from Azure AD
       id: get_token
       run: |
-        echo "Requesting token from Azure AD..."
+        echo "🔐 Requesting token from Azure AD..."
+
         response=$(curl -s -X POST -H "Content-Type: application/x-www-form-urlencoded" \
           -d "grant_type=client_credentials" \
           -d "client_id=${{ secrets.FABRIC_CLIENT_ID }}" \
@@ -56,17 +57,17 @@ jobs:
 
         if [ -z "$access_token" ] || [ "$access_token" == "null" ]; then
           echo "❌ Failed to obtain access token"
-          echo "🔍 Response from Azure:"
+          echo "🔍 Azure Response:"
           echo "$response"
           exit 1
         fi
 
         echo "::add-mask::$access_token"
-        echo "token=$access_token" >> $GITHUB_OUT
-        
+        echo "token=$access_token" >> $GITHUB_OUTPUT
+
     - name: Trigger Dataflow
       run: |
-        echo "Triggering Dataflow in ${{ env.ENV }} environment..."
+        echo "🚀 Triggering Dataflow for ${{ env.ENV }} environment..."
         curl -X POST \
           "https://api.powerbi.com/v1.0/myorg/groups/${{ steps.ids.outputs.WORKSPACE_ID }}/dataflows/${{ steps.ids.outputs.DATAFLOW_ID }}/refreshes" \
           -H "Authorization: Bearer ${{ steps.get_token.outputs.token }}" \
