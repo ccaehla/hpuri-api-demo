@@ -40,7 +40,7 @@ jobs:
           https://login.microsoftonline.com/${{ secrets.FABRIC_TENANT_ID }}/oauth2/v2.0/token)
 
         access_token=$(echo "$response" | jq -r '.access_token')
-
+        echo "$access_token"
         if [ -z "$access_token" ] || [ "$access_token" == "null" ]; then
           echo "❌ Failed to obtain access token"
           echo "🔍 Azure Response:"
@@ -54,7 +54,7 @@ jobs:
     - name: Trigger Dataflow
       run: |
         echo "🚀 Triggering Dataflow for ${{ env.ENV }} environment..." 
-        echo "$access_token"
+        
         curl -X POST \
           "https://api.powerbi.com/v1.0/myorg/groups/${{ secrets.FABRIC_WORKSPACE_ID }}/dataflows/${{ secrets.FABRIC_DATAFLOW_ID }}/refreshes" \
           -H "Authorization: Bearer ${{ access_token }}" \
