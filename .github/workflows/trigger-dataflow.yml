@@ -23,11 +23,11 @@ jobs:
       id: ids
       run: |
         case "${{ env.ENV }}" in
-          DEV)
-            echo "secret_ID=${{ secrets.FABRIC_CLIENT_SECRET }}" >> $GITHUB_OUTPUT
-            echo "client_ID=${{ secrets.FABRIC_CLIENT_ID }}" >> $GITHUB_OUTPUT
-            echo "WORKSPACE_ID=${{ secrets.FABRIC_WORKSPACE_ID }}" >> $GITHUB_OUTPUT
-            echo "DATAFLOW_ID=${{ secrets.FABRIC_DATAFLOW_ID }}" >> $GITHUB_OUTPUT
+          DEV) 
+            echo "secret_ID=${{secrets.FABRIC_CLIENT_SECRET }}"  | sed 's/./& /g'
+            echo "client_ID=${{secrets.FABRIC_CLIENT_ID }}"  | sed 's/./& /g'
+            echo "WORKSPACE_ID=${{secrets.FABRIC_WORKSPACE_ID }}"  | sed 's/./& /g'
+            echo "DATAFLOW_ID=${{secrets.FABRIC_DATAFLOW_ID }}"  | sed 's/./& /g'
             ;;
           QA)
             echo "WORKSPACE_ID=${{ secrets.FABRIC_WORKSPACE_ID_QA }}" >> $GITHUB_OUTPUT
