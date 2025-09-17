@@ -16,7 +16,7 @@ jobs:
 
     steps:
     - name: Print Environment
-      run: echo "Running for environment: $ENVIRONMENT"
+      run: echo "Running for environment:$ENVIRONMENT"
 
     - name: Get Access Token
       id: get_token
