@@ -14,7 +14,7 @@ permissions:
   id-token: write
   checks: write
 env:
-  USER_ID: ${{ inputs.user-id != '' && inputs.user-id || github.actor }}
+   USER_ID="${github.event.inputs.user_id}"
   
 jobs:
   # ──────────────────────────────────────────────
