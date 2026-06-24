@@ -16,7 +16,9 @@ permissions:
   id-token: write
   checks: write
 env:
-  USER_ID="${ github.event.client_payload.user_id }"
+# 2. Handle User ID (Safely extract only if client_payload exists)
+  if [ "${{ github.event.client_payload }}" != "" ]; then
+    USER_ID="${{ github.event.client_payload.user_id }}"
   
 jobs:
   # ──────────────────────────────────────────────
