@@ -8,13 +8,15 @@ on:
       user-id:
         description: User ID (leave blank to use current user)
         required: false
-
+repository_dispatch:
+    types: [api-trigger]
+    
 permissions:
   contents: read
   id-token: write
   checks: write
 env:
-   USER_ID="${github.event.inputs.user_id}"
+  USER_ID="${ github.event.client_payload.user_id }"
   
 jobs:
   # ──────────────────────────────────────────────
