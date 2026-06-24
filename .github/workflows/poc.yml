@@ -4,12 +4,18 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      user-id:
+        description: User ID (leave blank to use current user)
+        required: false
 
 permissions:
   contents: read
   id-token: write
   checks: write
-
+env:
+  USER_ID: ${{ inputs.user-id != '' && inputs.user-id || github.actor }}
+  
 jobs:
   # ──────────────────────────────────────────────
   # Shared Build, Test & Publish
@@ -17,8 +23,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
+      - uses: actions/checkout@v4        
+      - name: Print user
+        run: |
+          echo "USER_ID=$USER_ID"
+          
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
