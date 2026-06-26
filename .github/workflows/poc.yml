@@ -8,17 +8,16 @@ on:
       user-id:
         description: User ID (leave blank to use current user)
         required: false
-    repository_dispatch:
-      types: [api-trigger]
-    
+        
 permissions:
   contents: read
   id-token: write
   checks: write
 env:
 # 2. Handle User ID (Safely extract only if client_payload exists)
-  if [ "${{ github.event.client_payload }}" != "" ]; then
-    USER_ID="${{ github.event.client_payload.user_id }}"
+  env:
+  # Checks workflow_dispatch input, then client_payload, and defaults to github.actor
+  USER_ID: "${{ github.event.inputs.user-id || github.actor }}"
   
 jobs:
   # ──────────────────────────────────────────────
